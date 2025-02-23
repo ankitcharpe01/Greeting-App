@@ -27,10 +27,6 @@ public class GreetingController {
                     .body(Collections.singletonMap("error", "Something went wrong! " + e.getMessage()));
         }
     }
-    @GetMapping("/all")
-    public List<Greeting> getAllGreetings() {
-        return greetingService.getAllGreetings();
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Greeting> getGreetingById(@PathVariable Long id) {
@@ -38,6 +34,13 @@ public class GreetingController {
         return greeting.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping
+    public ResponseEntity<List<Greeting>> getAllGreetings() {
+        List<Greeting> greetings = greetingService.getAllGreetings();
+        return ResponseEntity.ok(greetings);  //
+    }
+
 }
 
 

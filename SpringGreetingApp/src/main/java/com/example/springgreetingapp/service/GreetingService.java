@@ -29,6 +29,7 @@ public class GreetingService {
         return greetingRepository.save(greeting);
     }
 
+    // UC6: Fetch all greeting messages from the database
     public List<Greeting> getAllGreetings() {
         return greetingRepository.findAll();
     }
