@@ -1,24 +1,36 @@
 package com.example.springgreetingapp.controller;
-
+import com.example.springgreetingapp.model.Greeting;
 import com.example.springgreetingapp.service.GreetingService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/greeting")
 public class GreetingController {
-    private final GreetingService greetingService;
+    @Autowired
+    private GreetingService greetingService;
 
-    // Constructor-based Dependency Injection
-    public GreetingController(GreetingService greetingService) {
-        this.greetingService = greetingService;
+    @PostMapping
+    public ResponseEntity<?> greet(@RequestParam(required = false) String firstName,
+                                   @RequestParam(required = false) String lastName) {
+        try {
+            Greeting greeting = greetingService.saveGreeting(firstName, lastName);
+            return ResponseEntity.ok(greeting);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Something went wrong! " + e.getMessage()));
+        }
     }
-
-    @GetMapping
-    public String getGreeting(@RequestParam(required = false) String firstName,
-                              @RequestParam(required = false) String lastName) {
-        return "{\"message\": \"" + greetingService.getGreetingMessage(firstName, lastName) + "\"}";
+    @GetMapping("/all")
+    public List<Greeting> getAllGreetings() {
+        return greetingService.getAllGreetings();
     }
 }
+
+
+
