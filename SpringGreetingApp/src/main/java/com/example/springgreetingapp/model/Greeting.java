@@ -8,8 +8,8 @@ public class Greeting {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "greeting_seq")
     @SequenceGenerator(name = "greeting_seq", sequenceName = "GREETING_SEQ", allocationSize = 1)
-    private Long id;
 
+    private Long id;
     @Column(nullable = false) // Ensure MESSAGE cannot be NULL
     private String message;
 
@@ -29,5 +29,9 @@ public class Greeting {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
